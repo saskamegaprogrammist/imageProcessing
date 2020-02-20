@@ -51,30 +51,30 @@ class QRDetector {
             startY = yTopLeft + Math.ceil((yBottomRight - yTopLeft)/2),
             endX = Math.ceil(xBottomRight + this.QRCodeProps.averagePixelSize*3.5),
             endY = Math.ceil(yBottomRight + this.QRCodeProps.averagePixelSize*3.5);
-        console.log(startX, startY, endX, endY);
+        //console.log(startX, startY, endX, endY);
         const centers = this.searchForAlignmentPatternsInArea(startX, startY, endX, endY);
         if (centers !== 1) {
-            console.log("ERROR");
+            //console.log("ERROR");
         } else {
-            console.log(this.alignmentModuleCenters[0].point.x, this.alignmentModuleCenters[0].point.y);
+            //console.log(this.alignmentModuleCenters[0].point.x, this.alignmentModuleCenters[0].point.y);
         }
     }
 
     findAlignmentMarkerCenter(currentRow, currentColumn, stateCount, moduleSizeInPixels) {
         const moduleEnd = stateCount[2] + stateCount[1];
         const columnCenter = currentColumn - moduleEnd + Math.ceil(stateCount[1] / 2);
-        console.log(currentRow, currentColumn);
-        console.log(currentRow, columnCenter);
+        //console.log(currentRow, currentColumn);
+        //console.log(currentRow, columnCenter);
         const rowCenter = this.checkVerticalAlignmentMarker(currentRow, columnCenter);
-        console.log(rowCenter);
+        //console.log(rowCenter);
         if (rowCenter === detectorProperties.errorPoint) return;
         const columnCenterNew = this.checkHorizontalAlignmentMarker(rowCenter, columnCenter);
-        console.log(columnCenterNew);
+        //console.log(columnCenterNew);
         if (columnCenterNew === detectorProperties.errorPoint) return;
         const checkDiagonalRatio = this.checkDiagonalAlignmentMarker(rowCenter, columnCenterNew);
-        console.log(checkDiagonalRatio);
+        //console.log(checkDiagonalRatio);
         if (checkDiagonalRatio) {
-            console.log("TRUE", columnCenterNew, rowCenter);
+            //console.log("TRUE", columnCenterNew, rowCenter);
             // this.setPixel(rowCenter, columnCenterNew, 126);
             const point = new cv.Point(columnCenterNew, rowCenter);
             const lineInPixels = Math.round(moduleSizeInPixels / detectorProperties.moduleSizeFinder);
@@ -86,12 +86,13 @@ class QRDetector {
         let xBottomRight, yBottomRight;
         xBottomRight = (centers[2] - centers[0]) + centers[4] ;
         yBottomRight = (centers[3] - centers[1]) + centers[5] ;
-        console.log(xBottomRight,yBottomRight);
+        //console.log(xBottomRight,yBottomRight);
+        let markersNumber = 0;
         if (this.QRCodeProps.version === 1) {
             centers.push(xBottomRight, yBottomRight)
             return;
         }
-        const markersNumber = Math.pow(Math.trunc(this.QRCodeProps.version / 7) + 2, 2) - 3;
+        markersNumber = Math.pow(Math.trunc(this.QRCodeProps.version / 7) + 2, 2) - 3;
         this.QRCodeProps.setAlignmentMarkersNumber(markersNumber);
         this.findBottomRightAlignmentMarker(centers[0], centers[1], xBottomRight, yBottomRight);
         const newPoint = this.calculateProjection(centers[0], centers[1], xBottomRight, yBottomRight, this.alignmentModuleCenters[0].point.x, this.alignmentModuleCenters[0].point.y);
@@ -113,7 +114,7 @@ class QRDetector {
         cv.pyrDown(this.QRimage, newimage, new cv.Size(0, 0), cv.BORDER_DEFAULT);
 
         this.QRCodeProps.setAveragePixelSize(newimage.cols/this.QRCodeProps.dimension);
-        console.log(this.QRCodeProps.averagePixelSize);
+        //console.log(this.QRCodeProps.averagePixelSize);
         //
         // const newPoints_2= cv.matFromArray(4, 1, cv.CV_32FC2,
         //     [0, 0, this.QRCodeProps.dimension, 0, 0, this.QRCodeProps.dimension, this.QRCodeProps.dimension, this.QRCodeProps.dimension ]);
@@ -150,7 +151,7 @@ class QRDetector {
             xTopLeft = this.moduleCenters[i].point.x;
             yTopLeft = this.moduleCenters[i].point.y;
         }
-        console.log(xBottomLeft, yBottomLeft, xTopLeft, yTopLeft, xTopRight, yTopRight);
+        //console.log(xBottomLeft, yBottomLeft, xTopLeft, yTopLeft, xTopRight, yTopRight);
         const topDistance = Math.round(Math.sqrt(Math.pow(xTopRight - xTopLeft, 2) + Math.pow(yTopRight - yTopLeft, 2)));
         const leftDistance = Math.round(Math.sqrt(Math.pow(xBottomLeft - xTopLeft, 2) + Math.pow(yBottomLeft - yTopLeft, 2)));
 
@@ -166,7 +167,7 @@ class QRDetector {
         const version = (dimension - 17) / 4;
 
         this.QRCodeProps = new QRCodeProps(dimension, version, averageModuleSize);
-        console.log(topDistance, leftDistance, averageModuleSize, dimension, version);
+        //console.log(topDistance, leftDistance, averageModuleSize, dimension, version);
 
         return [xTopLeft, yTopLeft, xTopRight, yTopRight, xBottomLeft, yBottomLeft,];
 
@@ -225,7 +226,7 @@ class QRDetector {
                 }
             }
         }
-        console.log(this.alignmentModuleCenters);
+        //console.log(this.alignmentModuleCenters);
         return this.alignmentModuleCenters.length ;
     }
 
@@ -271,22 +272,22 @@ class QRDetector {
                 }
             }
         }
-        console.log(this.moduleCenters);
+        //console.log(this.moduleCenters);
         return (this.moduleCenters.length === 3);
     }
 
     findModuleCenter(currentRow, currentColumn, stateCount, moduleSizeInPixels) {
         const moduleEnd = stateCount[4] + stateCount[3] + stateCount[2];
         const columnCenter = currentColumn - moduleEnd + Math.ceil(stateCount[2] / 2);
-        //console.log(currentRow, columnCenter);
+        ////console.log(currentRow, columnCenter);
         const rowCenter = this.checkVertical(currentRow, columnCenter);
         if (rowCenter === detectorProperties.errorPoint) return;
-        //console.log(rowCenter);
+        ////console.log(rowCenter);
         const columnCenterNew = this.checkHorizontal(rowCenter, columnCenter);
-        //console.log(columnCenterNew);
+        ////console.log(columnCenterNew);
         if (columnCenterNew === detectorProperties.errorPoint) return;
         const checkDiagonalRatio = this.checkDiagonal(rowCenter, columnCenterNew);
-        //console.log(checkDiagonalRatio);
+        ////console.log(checkDiagonalRatio);
         if (checkDiagonalRatio) {
             //this.setPixel(rowCenter, columnCenterNew, 126);
             const point = new cv.Point(columnCenterNew, rowCenter);
@@ -296,7 +297,7 @@ class QRDetector {
     }
 
     checkExistingModuleCenter(point, lineInPixels) {
-        //console.log(point);
+        ////console.log(point);
         for (let i=0; i < this.moduleCenters.length; i++) {
            if (Math.sqrt(Math.pow(this.moduleCenters[i].point.x - point.x, 2) + Math.pow(this.moduleCenters[i].point.y - point.y, 2))
                < detectorProperties.centersDistance ) return;
@@ -357,7 +358,7 @@ class QRDetector {
     checkVertical(currentRow, currentColumn) {
         const stateCountVertical = [0, 0, 0, 0, 0];
         const row = this.traverseVertical(currentRow, currentColumn, stateCountVertical);
-        //console.log(stateCountVertical);
+        ////console.log(stateCountVertical);
         const moduleSizeInPixelsVertical = this.calculateModuleSizeInPixels(stateCountVertical);
         if (this.checkingRatio(stateCountVertical, moduleSizeInPixelsVertical)) {
             const moduleEnd = stateCountVertical[4] + stateCountVertical[3] + stateCountVertical[2];
@@ -404,7 +405,7 @@ class QRDetector {
         const stateCountVertical = [0, 0, 0];
         const row = this.traverseVerticalAlignment(currentRow, currentColumn, stateCountVertical);
         const moduleSizeInPixelsVertical = this.calculateModuleSizeInPixels(stateCountVertical);
-        //console.log(stateCountVertical, moduleSizeInPixelsVertical);
+        ////console.log(stateCountVertical, moduleSizeInPixelsVertical);
         if (this.checkingRatioAlignmentMarker(stateCountVertical, moduleSizeInPixelsVertical)) {
             const moduleEnd = stateCountVertical[2] + stateCountVertical[1];
             return (row - moduleEnd + Math.trunc(stateCountVertical[1] / 2));
@@ -456,7 +457,7 @@ class QRDetector {
     checkHorizontal(currentRow, currentColumn) {
         const stateCountHorizontal = [0, 0, 0, 0, 0];
         const column = this.traverseHorizontal(currentRow, currentColumn, stateCountHorizontal);
-        //console.log(stateCountHorizontal);
+        ////console.log(stateCountHorizontal);
         const moduleSizeInPixelsHorizontal = this.calculateModuleSizeInPixels(stateCountHorizontal);
         if (this.checkingRatio(stateCountHorizontal, moduleSizeInPixelsHorizontal)) {
             const moduleEnd = stateCountHorizontal[4] + stateCountHorizontal[3] + stateCountHorizontal[2];
@@ -588,7 +589,7 @@ class QRDetector {
     checkDiagonal(currentRow, currentColumn) {
         const stateCountDiagonal = [0, 0, 0, 0, 0];
         this.traverseDiagonal(currentRow, currentColumn, stateCountDiagonal);
-        //console.log(stateCountDiagonal);
+        ////console.log(stateCountDiagonal);
         const moduleSizeInPixelsDiagonal = this.calculateModuleSizeInPixels(stateCountDiagonal);
         return this.checkingRatio(stateCountDiagonal, moduleSizeInPixelsDiagonal)
     }
@@ -637,9 +638,9 @@ class QRDetector {
             } else {
                 checkVariance[i] = Math.abs(lineInPixels - stateCount[i]) < variance;
             }
-            // console.log(variance);
-            // console.log(lineInPixels);
-            // console.log(i, stateCount[i]);
+            // //console.log(variance);
+            // //console.log(lineInPixels);
+            // //console.log(i, stateCount[i]);
         }
         for (let i=0; i<detectorProperties.statesSizeFinder; i++) {
             if (!checkVariance[i]) return false;
@@ -653,7 +654,7 @@ class QRDetector {
         const t = Math.round((m*pointX + p*pointY - m*lineX1 - p*lineY1) / (Math.pow(m, 2) + Math.pow(p, 2)));
         const projectionX = m*t + lineX1;
         const projectionY = p*t + lineY1;
-        console.log(projectionX, projectionY);
+        //console.log(projectionX, projectionY);
         return new cv.Point(projectionX, projectionY);
     }
 }

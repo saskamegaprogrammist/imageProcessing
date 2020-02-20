@@ -19,6 +19,25 @@ class BitsHolder {
 
     }
 
+    fill1AlignmentMarker() {
+        const size = detectorProperties.statesSizeAlignment;
+        const start = this.QRCodeProps.dimension-1 -detectorProperties.moduleSizeFinder-2;
+        for (let i = start; i < start + size; i++) {
+            for (let j = start; j < start + size; j++) {
+                this.bitMatrix[i][j] = helperBit;
+            }
+        }
+    }
+
+    fillAlignmentPatterns() {
+        const number = this.QRCodeProps.alignmentMarkersNumber;
+        if (number === 0) return;
+        if (number === 1) {
+
+        }
+    }
+
+
     fillFindingPatterns() {
         const size = detectorProperties.moduleSizeFinder;
         for (let i=0; i<=size; i++) {
