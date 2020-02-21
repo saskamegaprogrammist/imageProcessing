@@ -2,6 +2,7 @@ class ErrorCorrectionData {
     numberOfBlocks;
     numberOfCodewords;
     numberOfDataCodewords;
+    numberOfECCodewords;
     errorCapacity;
     numberOfMisdecodedProtectionCodewords = 0;
 
@@ -9,6 +10,7 @@ class ErrorCorrectionData {
         this.numberOfBlocks = numberOfBlocks;
         this.numberOfCodewords = numberOfCodewords;
         this.numberOfDataCodewords = numberOfDataCodewords;
+        this.numberOfECCodewords = numberOfCodewords - numberOfDataCodewords;
         this.numberOfMisdecodedProtectionCodewords = numberOfMisdecodedProtectionCodewords;
         this.calculateErrorCapacity();
     }

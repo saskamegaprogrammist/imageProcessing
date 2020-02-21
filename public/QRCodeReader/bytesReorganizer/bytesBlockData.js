@@ -1,11 +1,10 @@
-import {errorCorrectionLevels, formatInformationConstants, maskingFunctions, xor} from "./utils";
-
 class BytesBlockData {
     version;
     errorCorrectionLevel;
     blocksNumber;
     numberOfCodewords;
     errorCorrectionCodewordsNumber;
+    dataCodewordsNumber;
     errorCorrectionData = [];
 
     constructor(version, errorCorrectionLevel, numberOfCodewords, errorCorrectionCodewordsNumber, errorCorrectionData) {
@@ -14,6 +13,7 @@ class BytesBlockData {
         this.numberOfCodewords = numberOfCodewords;
         this.errorCorrectionData = errorCorrectionData;
         this.errorCorrectionCodewordsNumber = errorCorrectionCodewordsNumber;
+        this.dataCodewordsNumber = numberOfCodewords - errorCorrectionCodewordsNumber;
         this.calculateBlocksNumber();
     }
 
@@ -29,6 +29,10 @@ class BytesBlockData {
 
     getNumberOfCodewords() {
         return this.numberOfCodewords;
+    }
+
+    getNumberOfDataCodewords() {
+        return this.dataCodewordsNumber;
     }
 
     getErrorCorrectionCodewordsNumber() {

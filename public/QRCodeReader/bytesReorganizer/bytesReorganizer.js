@@ -6,7 +6,7 @@ class BytesBlockReorganizer {
 
     constructor(version, errorCorrectionLevel, matrix) {
         this.bitMatrix = matrix;
-        this.findBytesBlockData();
+        this.findBytesBlockData(version, errorCorrectionLevel);
         console.log(this.bytesBlockData);
     }
 
@@ -19,6 +19,22 @@ class BytesBlockReorganizer {
         }
         console.log("ERROR defining bytes block data");
     }
+
+    extractData() {
+        const dataCodewordsNumber = this.bytesBlockData.getNumberOfDataCodewords();
+        let counterCodewords = 0;
+        let counterBlocks = 0;
+        let upwards = true;
+        let i = this.bitMatrix.length - 1;
+        let j = this.bitMatrix.length - 1;
+        for (;;) {
+            for (let i=0; i<7; i++) {
+
+            }
+        }
+    }
+
+
 }
 
 export default BytesBlockReorganizer;

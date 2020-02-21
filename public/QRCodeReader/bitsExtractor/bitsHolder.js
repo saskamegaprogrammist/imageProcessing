@@ -77,14 +77,12 @@ class BitsHolder {
         const bits = [];
         for (let i=0; i<detectorProperties.moduleSizeFinder+2; i++) {
             if (i !== detectorProperties.moduleSizeFinder-1) {
-                bits.push(this.bitMatrix[detectorProperties.moduleSizeFinder+1][i]);
-                //this.bitMatrix[detectorProperties.moduleSizeFinder+1][i] = helperBit;
+                bits.push(Number(this.bitMatrix[detectorProperties.moduleSizeFinder+1].slice(i,i+1)));
             }
         }
         for (let j=detectorProperties.moduleSizeFinder; j>=0; j--) {
             if (j !== detectorProperties.moduleSizeFinder-1) {
-                bits.push(this.bitMatrix[j][detectorProperties.moduleSizeFinder+1]);
-                //this.bitMatrix[j][detectorProperties.moduleSizeFinder+1] = helperBit;
+                bits.push(Number(this.bitMatrix[j].slice(detectorProperties.moduleSizeFinder+1, detectorProperties.moduleSizeFinder+2)));
             }
         }
         return bits;
@@ -93,15 +91,33 @@ class BitsHolder {
     getFormatInformationBits2() {
         const bits = [];
         for (let i=this.QRCodeProps.dimension-1; i>=this.QRCodeProps.dimension - detectorProperties.moduleSizeFinder -1; i--) {
-            bits.push(this.bitMatrix[i][detectorProperties.moduleSizeFinder+1]);
-            //this.bitMatrix[i][detectorProperties.moduleSizeFinder+1] = helperBit;
+            bits.push(Number(this.bitMatrix[i].slice(detectorProperties.moduleSizeFinder+1,detectorProperties.moduleSizeFinder+2)));
         }
         for (let i=this.QRCodeProps.dimension - detectorProperties.moduleSizeFinder; i<this.QRCodeProps.dimension; i++) {
-            bits.push(this.bitMatrix[detectorProperties.moduleSizeFinder+1][i]);
-            //this.bitMatrix[detectorProperties.moduleSizeFinder+1][i] = helperBit;
+            bits.push(Number(this.bitMatrix[detectorProperties.moduleSizeFinder+1].slice(i, i+1)));
         }
         return bits;
     }
+
+    fillFormatInformationBits() {
+        for (let i=0; i<detectorProperties.moduleSizeFinder+2; i++) {
+            if (i !== detectorProperties.moduleSizeFinder-1) {
+                this.bitMatrix[detectorProperties.moduleSizeFinder+1][i] = helperBit;
+            }
+        }
+        for (let j=detectorProperties.moduleSizeFinder; j>=0; j--) {
+            if (j !== detectorProperties.moduleSizeFinder-1) {
+                this.bitMatrix[j][detectorProperties.moduleSizeFinder+1] = helperBit;
+            }
+        }
+        for (let i=this.QRCodeProps.dimension-1; i>=this.QRCodeProps.dimension - detectorProperties.moduleSizeFinder -1; i--) {
+            this.bitMatrix[i][detectorProperties.moduleSizeFinder+1] = helperBit;
+        }
+        for (let i=this.QRCodeProps.dimension - detectorProperties.moduleSizeFinder; i<this.QRCodeProps.dimension; i++) {
+            this.bitMatrix[detectorProperties.moduleSizeFinder+1][i] = helperBit;
+        }
+    }
+
 
     unmaskData(maskingFunction) {
         for (let i=0; i < this.QRCodeProps.dimension; i++) {

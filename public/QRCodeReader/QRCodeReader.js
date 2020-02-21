@@ -54,6 +54,7 @@ class QRCodeReader {
         this.formatInformationDecoder = new FormatInformationDecoder();
         this.formatInformationDecoder.setFormatInformation1(this.bitsHolder.getFormatInformationBits1());
         this.formatInformationDecoder.setFormatInformation2(this.bitsHolder.getFormatInformationBits2());
+        this.bitsHolder.fillFormatInformationBits();
         this.formatInfo = this.formatInformationDecoder.decode();
     }
 
