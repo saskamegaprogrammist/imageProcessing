@@ -42,6 +42,10 @@ class BytesBlockData {
     getBlocksNumber() {
         return this.blocksNumber;
     }
+
+    getErrorCorrectionData() {
+        return this.errorCorrectionData;
+    }
 }
 
 export default BytesBlockData;

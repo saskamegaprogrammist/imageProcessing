@@ -23,6 +23,14 @@ class ErrorCorrectionData {
         return this.numberOfBlocks;
     }
 
+    getNumberOfDataCodewords() {
+        return this.numberOfDataCodewords;
+    }
+
+    getNumberOfECCodewords() {
+        return this.numberOfECCodewords;
+    }
+
 }
 
 export default ErrorCorrectionData;

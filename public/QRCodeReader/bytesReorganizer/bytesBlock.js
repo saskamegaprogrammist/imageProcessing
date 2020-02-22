@@ -1,15 +1,18 @@
-class BytesBlockData {
-    errorCorrection;
-    data;
+class BytesBlock {
+    errorCorrectionBytes =[];
+    dataBytes = [];
 
-    constructor(data) {
-        this.data = data;
+    constructor() {
     }
 
-    setErrorCorrectionData(ecData) {
-        this.errorCorrection = ecData;
+    addDataByte(byte) {
+        this.dataBytes.push(byte);
+    }
+
+    addErrorCorrectionDataByte(ecData) {
+        this.errorCorrectionBytes.push(ecData);
     }
 
 }
 
-export default BytesBlockData;
+export default BytesBlock;

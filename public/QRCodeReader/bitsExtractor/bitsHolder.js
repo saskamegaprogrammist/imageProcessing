@@ -129,6 +129,7 @@ class BitsHolder {
                 }
             }
         }
+        console.log(this.bitMatrix);
     }
 
     getInvertedBit(bit) {

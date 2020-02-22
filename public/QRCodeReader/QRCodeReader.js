@@ -12,7 +12,6 @@ class QRCodeReader {
     processedImage;
     formatInformationDecoder;
     formatInfo;
-    bytesBlockReorganis;
 
     constructor () {
 

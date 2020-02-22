@@ -2,6 +2,7 @@ import MainPageComponent from "./components/main-page";
 import cv from "./opencv/opencv"
 import QRDetector from "./QRCodeReader/detector/detector";
 import QRCodeReader from "./QRCodeReader/QRCodeReader";
+import {inv} from 'mathjs'
 
 const application = document.getElementById('application');
 const baseBlock = document.createElement('div');

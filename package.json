@@ -16,8 +16,9 @@
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
     "debug": "^3.1.0",
-    "express-history-api-fallback": "^2.2.1",
     "express": "^4.16.3",
+    "express-history-api-fallback": "^2.2.1",
+    "mathjs": "^6.6.0",
     "morgan": "^1.9.0",
     "pug": "^2.0.4",
     "uuid": "^3.3.2"
