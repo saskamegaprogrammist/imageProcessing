@@ -27,8 +27,16 @@ class ErrorCorrectionData {
         return this.numberOfDataCodewords;
     }
 
+    getNumberOfCodewords() {
+        return this.numberOfCodewords;
+    }
+
     getNumberOfECCodewords() {
         return this.numberOfECCodewords;
+    }
+
+    getSyndromeNumber() {
+        return this.errorCapacity*2;
     }
 
 }

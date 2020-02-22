@@ -1,6 +1,7 @@
 import {bytesBlockInformation, errorCorrectionLevels, formatInformationConstants, maskingFunctions, xor} from "./utils";
 import {detectorProperties, helperBit} from "../constants/constants";
 import BytesBlock from "./bytesBlock";
+import ErrorCorrector from "../errorCorrection/errorCorrector";
 
 class BytesBlockReorganizer {
     bitMatrix;
@@ -10,6 +11,7 @@ class BytesBlockReorganizer {
     matrixJ;
     upwards;
     right;
+    errorCorrector;
 
     constructor(version, errorCorrectionLevel, matrix) {
         this.bitMatrix = matrix;
@@ -17,6 +19,18 @@ class BytesBlockReorganizer {
         console.log(this.bytesBlockData);
         this.extractData();
         console.log(this.blocks);
+        this.correctBytes();
+    }
+
+    correctBytes() {
+        this.errorCorrector = new ErrorCorrector();
+        for (let i=0; i<this.blocks.length; i++) {
+            this.blocks[i] = this.errorCorrector.correct(this.blocks[i]);
+        }
+    }
+
+    getDataBlocks() {
+        return this.blocks;
     }
 
     findBytesBlockData(version, errorCorrectionLevel) {
@@ -61,6 +75,12 @@ class BytesBlockReorganizer {
             currentNumberOfCodewords = errorCorrectionData[1].getNumberOfECCodewords() - currentNumberOfCodewords;
             this.iterateMatrix(currentNumberOfCodewords, start, blocksNumber, dimension, mode);
         }
+        for (let i=0; i<start; i++) {
+            this.blocks[i].setErrorCorrectionData(errorCorrectionData[0]);
+        }
+        for (let i=start; i<blocksNumber; i++) {
+            this.blocks[i].setErrorCorrectionData(errorCorrectionData[1]);
+        }
     }
 
     iterateMatrix(bound, start, blocksNumber, dimension, mode) {
@@ -68,7 +88,7 @@ class BytesBlockReorganizer {
             for (let j=start; j<blocksNumber; j++) {
                 let data = 0;
                 for (let k=0; k<=7; ) {
-                    console.log(this.matrixI, this.matrixJ);
+                    //console.log(this.matrixI, this.matrixJ);
                     if (this.bitMatrix[this.matrixI][this.matrixJ] !== helperBit) {
                         data += Math.pow(10, k)*this.bitMatrix[this.matrixI][this.matrixJ];
                         k++;
@@ -106,7 +126,7 @@ class BytesBlockReorganizer {
                     }
                     this.right = !this.right;
                 }
-                console.log(data);
+                //console.log(data);
                 if (mode === 0) {
                     this.blocks[j].addDataByte(parseInt(data, 2));
                 } else {

@@ -12,6 +12,7 @@ class QRCodeReader {
     processedImage;
     formatInformationDecoder;
     formatInfo;
+    dataBlocks;
 
     constructor () {
 
@@ -59,6 +60,7 @@ class QRCodeReader {
 
     readDataBlocks() {
         const bytesBlockReorganizer = new BytesBlockReorganizer(this.QRCodeProps.version, this.formatInfo.getErrorCorrectionLevel(), this.bitsHolder.getMatrix());
+        this.dataBlocks = bytesBlockReorganizer.getDataBlocks();
 
     }
 }
