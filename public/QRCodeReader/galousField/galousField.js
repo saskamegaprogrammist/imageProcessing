@@ -5,7 +5,11 @@ class GalousField {
     primitivePowersInverted = new Array(256);
 
     constructor() {
+        if (GalousField.__instance) {
+            return GalousField.__instance;
+        }
         this.generatePrimitivePowers();
+        GalousField.__instance = this;
     }
 
     generatePrimitivePowers() {
@@ -26,9 +30,10 @@ class GalousField {
     }
 
     multiply(number1, number2) {
-        console.log(number1, number2, this.primitivePowersInverted[number1], this.primitivePowersInverted[number2]);
+        if (number1 === 0 || number2 === 0) return 0;
+        //console.log(number1, number2, this.primitivePowersInverted[number1], this.primitivePowersInverted[number2], (this.primitivePowersInverted[number1] + this.primitivePowersInverted[number2])%(this.size-1));
         const res = this.primitivePowers[(this.primitivePowersInverted[number1] + this.primitivePowersInverted[number2])%(this.size-1)];
-        console.log(res);
+        //console.log(res);
         return res;
     }
 

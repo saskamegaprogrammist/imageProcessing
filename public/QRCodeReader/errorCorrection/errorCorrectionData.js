@@ -11,7 +11,9 @@ class ErrorCorrectionData {
         this.numberOfCodewords = numberOfCodewords;
         this.numberOfDataCodewords = numberOfDataCodewords;
         this.numberOfECCodewords = numberOfCodewords - numberOfDataCodewords;
-        this.numberOfMisdecodedProtectionCodewords = numberOfMisdecodedProtectionCodewords;
+        if (numberOfMisdecodedProtectionCodewords) {
+            this.numberOfMisdecodedProtectionCodewords = numberOfMisdecodedProtectionCodewords;
+        }
         this.calculateErrorCapacity();
     }
 
@@ -37,6 +39,10 @@ class ErrorCorrectionData {
 
     getSyndromeNumber() {
         return this.errorCapacity*2;
+    }
+
+    getErrorCapacity() {
+        return this.errorCapacity;
     }
 
 }

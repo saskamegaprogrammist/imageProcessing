@@ -88,9 +88,8 @@ class BytesBlockReorganizer {
             for (let j=start; j<blocksNumber; j++) {
                 let data = 0;
                 for (let k=0; k<=7; ) {
-                    //console.log(this.matrixI, this.matrixJ);
                     if (this.bitMatrix[this.matrixI][this.matrixJ] !== helperBit) {
-                        data += Math.pow(10, k)*this.bitMatrix[this.matrixI][this.matrixJ];
+                        data += Math.pow(10, 7-k)*this.bitMatrix[this.matrixI][this.matrixJ];
                         k++;
                     }
                     if (this.upwards) {
