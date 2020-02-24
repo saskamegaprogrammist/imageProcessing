@@ -29,6 +29,10 @@ class GalousField {
         this.primitivePowersInverted[0] = 255;
     }
 
+    getInverse(number) {
+        return this.primitivePowers[this.size -1 - this.primitivePowersInverted[number]];
+    }
+
     multiply(number1, number2) {
         if (number1 === 0 || number2 === 0) return 0;
         //console.log(number1, number2, this.primitivePowersInverted[number1], this.primitivePowersInverted[number2], (this.primitivePowersInverted[number1] + this.primitivePowersInverted[number2])%(this.size-1));
@@ -36,6 +40,20 @@ class GalousField {
         //console.log(res);
         return res;
     }
+
+    divide(number1, number2) {
+        if (number2 === 0) {
+            console.log("ERROR DIVIDING");
+            return ;
+        }
+        if (number1 === 0) return 0;
+        let degree = (this.primitivePowersInverted[number1] - this.primitivePowersInverted[number2]);
+        if (degree<0) {
+            degree = (this.size-1) + degree;
+        }
+        return this.primitivePowers[degree];
+    }
+
 
     add(number1, number2) {
         return number1 ^ number2;

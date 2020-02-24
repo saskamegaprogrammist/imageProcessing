@@ -91,6 +91,7 @@ class BytesBlockReorganizer {
                     if (this.bitMatrix[this.matrixI][this.matrixJ] !== helperBit) {
                         data += Math.pow(10, 7-k)*this.bitMatrix[this.matrixI][this.matrixJ];
                         k++;
+                        console.log(data, this.matrixI, this.matrixJ);
                     }
                     if (this.upwards) {
                         if (this.right) {
@@ -110,7 +111,8 @@ class BytesBlockReorganizer {
                         if (this.right) {
                             this.matrixJ--;
                         } else {
-                            if (this.matrixI === dimension - detectorProperties.moduleSizeFinder - 1 && this.bitMatrix[this.matrixI + 1][this.matrixJ] === helperBit   //found finder pattern
+                            if (this.matrixI === dimension - detectorProperties.moduleSizeFinder - 1 && this.bitMatrix[this.matrixI + 1][this.matrixJ] === helperBit
+                                && this.matrixJ <= detectorProperties.moduleSizeFinder +1 //found finder pattern
                                 || this.matrixI === dimension) { //found end of code
                                 this.matrixJ--;
                                 this.upwards = !this.upwards;
@@ -125,7 +127,7 @@ class BytesBlockReorganizer {
                     }
                     this.right = !this.right;
                 }
-                //console.log(data);
+                console.log(data);
                 if (mode === 0) {
                     this.blocks[j].addDataByte(parseInt(data, 2));
                 } else {

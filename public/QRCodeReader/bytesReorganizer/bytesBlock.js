@@ -25,6 +25,14 @@ class BytesBlock {
         return this.dataBytes;
     }
 
+    setECBytes(errorCorrectionBytes) {
+        this.errorCorrectionBytes = errorCorrectionBytes;
+    }
+    setDataBytes(dataBytes) {
+        this.dataBytes = dataBytes;
+    }
+
+
     getErrorCorrectionData() {
         return this.errorCorrectionData;
     }

@@ -8,13 +8,23 @@ class Polynom {
         this.calculateCoefficents(coefficents);
     }
 
+
     calculateCoefficents(coefficents) {
         let counter = 0;
-        while (coefficents[counter] === 0) {
-            counter++;
+        if (coefficents.length !== 1) {
+            while (coefficents[counter] === 0) {
+                counter++;
+            }
         }
-        this.coefficents = counter.slice(counter, coefficents.length);
-        this.degree = this.coefficents.length;
+        this.coefficents = coefficents.slice(counter, coefficents.length);
+        this.degree = this.coefficents.length-1;
+    }
+
+    increaseDegreeBy(value) {
+        for (let i=0; i<value; i++) {
+            this.coefficents.push(0);
+        }
+        this.degree+=value;
     }
 
     getDegree() {
@@ -23,6 +33,9 @@ class Polynom {
 
     getCoefficentByDegree(degree) {
         return this.coefficents[this.degree - degree];
+    }
+    getCoefficents() {
+        return this.coefficents;
     }
 }
 

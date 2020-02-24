@@ -1,5 +1,7 @@
 import GalousField from "../galousField/galousField";
 import {inv, det, multiply} from 'mathjs'
+import Polynom from "../polynoms/polynom";
+import PolynomsUtils from "../polynoms/polynomsUtils";
 
 class ErrorCorrector {
     errorCorrectionData;
@@ -8,6 +10,8 @@ class ErrorCorrector {
     galousField;
     correctFullData;
     syndromes;
+    errorsPolynom;
+    remainderPolynom;
 
     constructor() {
         this.galousField = new GalousField();
@@ -62,39 +66,109 @@ class ErrorCorrector {
             return this.bytesBlock;
         } else {
             console.log("NEEDS CORRECTION");
-            this.constructMatrix();
+            this.euclidianAlgorithm();
+            console.log(this.errorsPolynom);
+            const errorPositions = this.chensSearch();
+            const errorValues = this.errorValuesSearch(errorPositions);
+            this.errorsAdding(errorPositions, errorValues);
+            console.log(this.bytes);
+            this.setCorrectedData();
             return this.bytesBlock;
         }
     }
 
-    constructMatrix() {
-        let errorCapacity = this.errorCorrectionData.getErrorCapacity();
-        let errorPositionVector;
-        for (; errorCapacity>=1; errorCapacity--) {
-            const syndromesMatrix = new Array(errorCapacity);
-            for (let i=0; i<errorCapacity; i++) {
-                syndromesMatrix[i] = new Array(errorCapacity);
-            }
-            for (let i=0; i<errorCapacity; i++) {
-                for (let j=0; j<errorCapacity; j++) {
-                    syndromesMatrix[i][j] = this.syndromes[i+j];
-                }
-            }
-            if (det(syndromesMatrix) !== 0) {
-                const syndromesVector = new Array(errorCapacity);
-                for (let i=0; i<errorCapacity; i++) {
-                    syndromesVector[i] = this.syndromes[errorCapacity+i];
-                }
-                const invertedSyndromesMatrix = inv(syndromesMatrix);
-                errorPositionVector = multiply(invertedSyndromesMatrix, syndromesVector);
-                break;
+    setCorrectedData() {
+        const dataWords = this.errorCorrectionData.getNumberOfDataCodewords();
+        this.bytesBlock.setDataBytes(this.bytes.slice(0, dataWords));
+        this.bytesBlock.setECBytes(this.bytes.slice(dataWords, this.bytes.length));
+    }
+
+    euclidianAlgorithm() {
+        const ecCapacity = this.errorCorrectionData.getErrorCapacity();
+        const polynomUtils = new PolynomsUtils();
+        let polynom1 = polynomUtils.createPlainPolynomByDegree(this.syndromes.length);
+        let polynom2 = new Polynom(this.syndromes.reverse());
+        let b1 = polynomUtils.createZero();
+        let b2 = new polynomUtils.createPlainPolynomByDegree(0);
+        console.log(polynom1, polynom2);
+        for (;;) {
+            let {divisionResult, remainder} = polynomUtils.dividePolynoms(polynom1, polynom2);
+            console.log(remainder, divisionResult);
+            let swap = b2;
+            let a = polynomUtils.multiplyPolynoms(divisionResult, b2);
+            //console.log(a, b1);
+            b2 = polynomUtils.addPolynoms(a, b1);
+            b1 = swap;
+
+            console.log(b1, b2);
+
+            if (remainder.getDegree() < ecCapacity) {
+                this.errorsPolynom = b2;
+                this.remainderPolynom = remainder;
+                return;
+            } else {
+                polynom1 = polynom2;
+                polynom2 = remainder;
             }
         }
-        console.log(errorPositionVector);
+    }
 
+    chensSearch() {
+        const polynom = this.errorsPolynom;
+        const degree = polynom.getDegree();
+        const roots = [];
+        let x=0;
+        for (; x<this.galousField.size; x++) {
+            let answer = polynom.getCoefficentByDegree(degree);
+            for (let i = degree - 1; i >= 0; i--) {
+                answer = this.galousField.add(polynom.getCoefficentByDegree(i), this.galousField.multiply(answer, x));
+            }
+            if (answer===0) roots.push(x);
+        }
+        const degrees = [];
+        for (let i=0; i<degree; i++) {
+            degrees.push(this.galousField.getInverse(roots[i]));
+        }
+        return degrees;
+    }
+
+    errorValuesSearch(errorPositions) {
+        const errorValues = [];
+        let derivativeCoefficents = this.errorsPolynom.getCoefficents();
+        derivativeCoefficents.slice(0, derivativeCoefficents.length-1);
+        for (let i=derivativeCoefficents.length-2; i>=0; i-=2) {
+            derivativeCoefficents[i]=0;
+        }
+        const derivativePolynom = new Polynom(derivativeCoefficents);
+        const derivativeDegree = derivativePolynom.getDegree();
+        const remainderDegree = this.remainderPolynom.getDegree();
+        for (let i=0; i<errorPositions.length; i++) {
+            let x = this.galousField.getInverse(errorPositions[i]);
+            let derivativeVal = derivativePolynom.getCoefficentByDegree(derivativeDegree);
+            for (let i = derivativeDegree - 1; i >= 0; i--) {
+                derivativeVal = this.galousField.add(derivativePolynom.getCoefficentByDegree(i), this.galousField.multiply(derivativeVal, x));
+            }
+            let remainderVal = this.remainderPolynom.getCoefficentByDegree(remainderDegree);
+            for (let i = remainderDegree - 1; i >= 0; i--) {
+                remainderVal = this.galousField.add(this.remainderPolynom.getCoefficentByDegree(i), this.galousField.multiply(remainderVal, x));
+            }
+            errorValues.push(this.galousField.multiply(remainderVal, this.galousField.getInverse(derivativeVal)));
+        }
+        return errorValues;
+    }
+
+    errorsAdding(errorPositions, errorValues) {
+        //console.log(errorPositions, errorValues);
+        const bytesLength = this.bytes.length;
+        for (let i=0; i<errorPositions.length; i++) {
+            const power = this.galousField.getPowerByVal(errorPositions[i]);
+            //console.log(power);
+            this.bytes[bytesLength -1 - power] = this.galousField.add(this.bytes[bytesLength -1 - power], errorValues[i]);
+        }
     }
 
 
+//65,18,7,119,119,114,230,119,38,151,7,7,86,230,87,66,231,39,80,236,17,236,17,236,17,236,17,236,114,157,79,21,180,210,77,97,92,83,33,223,192,64,164,245
 }
 
 export default ErrorCorrector;

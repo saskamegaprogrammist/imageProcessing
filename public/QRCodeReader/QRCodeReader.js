@@ -4,6 +4,9 @@ import BitsHolder from "./bitsExtractor/bitsHolder";
 import FormatInformationDecoder from "./formatInformationDecoder/formatInformationDecoder";
 import {formatInformationConstants} from "./formatInformationDecoder/utils";
 import BytesBlockReorganizer from "./bytesReorganizer/bytesReorganizer";
+import PolynomsUtils from "./polynoms/polynomsUtils";
+import Polynom from "./polynoms/polynom";
+import BytesDecoder from "./bytesDecoder/bytesDecoder";
 
 class QRCodeReader {
     QRCodeProps;
@@ -32,6 +35,10 @@ class QRCodeReader {
         console.log(this.formatInfo);
         this.bitsHolder.unmaskData(this.formatInfo.getMaskingFunction());
         this.readDataBlocks();
+         const polynomeUtils = new PolynomsUtils();
+        // polynomeUtils.dividePolynoms(new Polynom([4, 2, 1, 0, 0]), new Polynom( [1, 2, 2]));
+         console.log(polynomeUtils.multiplyPolynoms(new Polynom( [102, 97]), new Polynom([88, 70, 81])));
+        // console.log(polynomeUtils.addPolynoms(new Polynom([4, 2, 1, 46, 58]), new Polynom([46, 58])));
     }
 
     extract() {
@@ -61,6 +68,8 @@ class QRCodeReader {
     readDataBlocks() {
         const bytesBlockReorganizer = new BytesBlockReorganizer(this.QRCodeProps.version, this.formatInfo.getErrorCorrectionLevel(), this.bitsHolder.getMatrix());
         this.dataBlocks = bytesBlockReorganizer.getDataBlocks();
+        const bytesDecoder = new BytesDecoder(this.dataBlocks);
+        bytesDecoder.decode();
 
     }
 }
