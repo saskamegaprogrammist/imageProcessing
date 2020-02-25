@@ -26,7 +26,12 @@ image.onload = () => {
     //cv.imshow('canvas', mat);
     const qrCodeReader = new QRCodeReader();
     const result = qrCodeReader.read(mat);
-    document.querySelector(".result-window").innerText = result;
+    let finalMessage = "";
+    if (result.includes(undefined)) finalMessage = "COULD NOT DECODE :(";
+    else {
+        result.forEach((mess) => finalMessage = `${finalMessage} ${mess}`);
+    }
+    document.querySelector(".result-window").innerText = finalMessage;
     //mat = qrCodeReader.getProcessedImage();
     //cv.imshow('canvas', mat);
 };
