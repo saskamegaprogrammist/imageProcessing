@@ -23,9 +23,10 @@ image.onload = () => {
     let mat = cv.imread(image);
     cv.cvtColor(mat, mat, cv.COLOR_RGBA2GRAY);
     cv.adaptiveThreshold(mat, mat, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 251, 0);
-    cv.imshow('canvas', mat);
+    //cv.imshow('canvas', mat);
     const qrCodeReader = new QRCodeReader();
-    qrCodeReader.read(mat);
-    mat = qrCodeReader.getProcessedImage();
-    cv.imshow('canvas', mat);
-}
+    const result = qrCodeReader.read(mat);
+    document.querySelector(".result-window").innerText = result;
+    //mat = qrCodeReader.getProcessedImage();
+    //cv.imshow('canvas', mat);
+};

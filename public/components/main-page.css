@@ -1,0 +1,29 @@
+.result-window {
+    padding: 10px;
+    border: 1px solid darkcyan;
+    border-radius: 10px;
+    height: 100px;
+    width: 300px;
+    font-family: "Ubuntu Mono", serif;
+    color: darkcyan;
+}
+
+.image-input {
+    background-color: white;
+    color: darkcyan;
+    width: 300px;
+}
+
+.image-input-label {
+    background-color: white;
+    color: darkcyan;
+    width: 300px;
+}
+
+.main-page{
+    display: flex;
+    justify-content: center;
+}
+
+.original-image {
+}
