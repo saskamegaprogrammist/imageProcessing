@@ -36,17 +36,17 @@ class BytesDecoder {
         const secondByteByte = this.addZeros(Number(secondByteInt).toString(2));
         current = secondByteByte.substring(0, blockCharCount-4);
         blockCharCountNumber += current;
-        const blockCharCountNumnberInt =  parseInt(blockCharCountNumber, 2).toString()
+        const blockCharCountNumberInt =  parseInt(blockCharCountNumber, 2).toString();
         const remainderBits = secondByteByte.substring(blockCharCount-4, byteLength);
         console.log(blockMode);
 
         switch (blockMode) {
             case "NUM":
-                return this.decodeNumberBlock(blockCharCountNumnberInt, remainderBits, dataBytesInt);
+                return this.decodeNumberBlock(blockCharCountNumberInt, remainderBits, dataBytesInt);
             case "ALPHANUM":
-                //return this.decodeAlphaNumberBlock(blockCharCountNumnberInt, remainderBits, dataBytesInt);
+                //return this.decodeAlphaNumberBlock(blockCharCountNumberInt, remainderBits, dataBytesInt);
             case "BYTE":
-                return this.decodeAsciiBlock(blockCharCountNumnberInt, remainderBits, dataBytesInt);
+                return this.decodeAsciiBlock(blockCharCountNumberInt, remainderBits, dataBytesInt);
         }
     }
     decodeNumberBlock(amountOfData, remainderBits, dataBytesInt) {
@@ -76,9 +76,11 @@ class BytesDecoder {
                 if ((10-j) >= byteLength) {
                     remainderBits = "";
                     currentByte += newByteIntByte;
+                    j+=byteLength;
                 } else {
                     currentByte += newByteIntByte.substring(0, 10-j);
                     remainderBits = newByteIntByte.substring(10-j, byteLength);
+                    j=10;
                 }
 
             }
