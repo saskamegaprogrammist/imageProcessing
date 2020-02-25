@@ -28,6 +28,7 @@ class BytesDecoder {
         const firstByteInt = dataBytesInt[0];
         const firstByteByte = this.addZeros(Number(firstByteInt).toString(2));
         let current = firstByteByte.substring(0,  4);
+        console.log(current);
         const blockMode = modes[current];
         const blockCharCount = charCount[current];
         let blockCharCountNumber = firstByteByte.substring(4, byteLength);
@@ -37,6 +38,7 @@ class BytesDecoder {
         blockCharCountNumber += current;
         const blockCharCountNumnberInt =  parseInt(blockCharCountNumber, 2).toString()
         const remainderBits = secondByteByte.substring(blockCharCount-4, byteLength);
+        console.log(blockMode);
 
         switch (blockMode) {
             case "NUM":
@@ -48,7 +50,7 @@ class BytesDecoder {
         }
     }
     decodeNumberBlock(amountOfData, remainderBits, dataBytesInt) {
-        let message;
+        let message = "";
         let restBits = amountOfData%3;
         switch (restBits) {
             case 0:
