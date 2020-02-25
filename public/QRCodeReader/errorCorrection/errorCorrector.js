@@ -67,9 +67,10 @@ class ErrorCorrector {
         } else {
             console.log("NEEDS CORRECTION");
             this.euclidianAlgorithm();
-            console.log(this.errorsPolynom);
+            console.log(this.errorsPolynom, this.remainderPolynom);
             const errorPositions = this.chensSearch();
             const errorValues = this.errorValuesSearch(errorPositions);
+            console.log(errorValues, errorPositions);
             this.errorsAdding(errorPositions, errorValues);
             console.log(this.bytes);
             this.setCorrectedData();
@@ -93,14 +94,14 @@ class ErrorCorrector {
         console.log(polynom1, polynom2);
         for (;;) {
             let {divisionResult, remainder} = polynomUtils.dividePolynoms(polynom1, polynom2);
-            console.log(remainder, divisionResult);
+            //console.log(remainder, divisionResult);
             let swap = b2;
             let a = polynomUtils.multiplyPolynoms(divisionResult, b2);
             //console.log(a, b1);
             b2 = polynomUtils.addPolynoms(a, b1);
             b1 = swap;
 
-            console.log(b1, b2);
+            //console.log(b1, b2);
 
             if (remainder.getDegree() < ecCapacity) {
                 this.errorsPolynom = b2;
@@ -125,6 +126,7 @@ class ErrorCorrector {
             }
             if (answer===0) roots.push(x);
         }
+        console.log(roots);
         const degrees = [];
         for (let i=0; i<degree; i++) {
             degrees.push(this.galousField.getInverse(roots[i]));
@@ -134,7 +136,7 @@ class ErrorCorrector {
 
     errorValuesSearch(errorPositions) {
         const errorValues = [];
-        let derivativeCoefficents = this.errorsPolynom.getCoefficents();
+        let derivativeCoefficents = this.errorsPolynom.getCoefficents().slice();
         derivativeCoefficents.slice(0, derivativeCoefficents.length-1);
         for (let i=derivativeCoefficents.length-2; i>=0; i-=2) {
             derivativeCoefficents[i]=0;

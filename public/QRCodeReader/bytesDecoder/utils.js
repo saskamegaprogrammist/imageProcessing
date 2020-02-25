@@ -1,14 +1,14 @@
 const modes = {
-    '111' : "ECI",
-    '1' : "NUM",
-    '10' : "ALPHANUM",
-    '100' : "BYTE"
+    '0111' : "ECI",
+    '0001' : "NUM",
+    '0010' : "ALPHANUM",
+    '0100' : "BYTE"
 };
 
 const charCount = {
-    '1' :  10,
-    '10' : 9,
-    '100' : 8
+    '0001' :  10,
+    '0010' : 9,
+    '0100' : 8
 };
 
 export {modes, charCount};

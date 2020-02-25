@@ -12,10 +12,11 @@ const detectorProperties = {
 };
 
 const helperBit = -1;
+const byteLength = 8;
 
 const QRPicProps = {
     resize : 10,
     halfFindMarker : 35,
 };
 
-export {detectorProperties, QRPicProps, helperBit};
+export {detectorProperties, QRPicProps, helperBit, byteLength};

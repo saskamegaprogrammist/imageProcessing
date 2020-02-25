@@ -66,6 +66,7 @@ class PolynomsUtils {
         for (let i=degreeSmaller+1; i<=degreeBigger; i++) {
             newCoeff.push(coeffBiggerRev[degreeBigger-i]);
         }
+        //console.log(newCoeff);
         return new Polynom(newCoeff.reverse());
     }
 
