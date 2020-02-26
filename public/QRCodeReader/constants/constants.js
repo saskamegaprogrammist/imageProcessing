@@ -7,7 +7,7 @@ const detectorProperties = {
     centersDistance : 10,
     rowsSkipped : 2,
     takeVariance : (moduleSize) => {
-        return moduleSize/3;
+        return moduleSize/2;
     }
 };
 

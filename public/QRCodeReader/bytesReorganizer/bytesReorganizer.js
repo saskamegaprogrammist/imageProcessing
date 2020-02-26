@@ -91,7 +91,7 @@ class BytesBlockReorganizer {
                     if (this.bitMatrix[this.matrixI][this.matrixJ] !== helperBit) {
                         data += Math.pow(10, 7-k)*this.bitMatrix[this.matrixI][this.matrixJ];
                         k++;
-                        console.log(data, this.matrixI, this.matrixJ);
+                        //console.log(data, this.matrixI, this.matrixJ);
                     }
                     if (this.upwards) {
                         if (this.right) {
@@ -128,6 +128,7 @@ class BytesBlockReorganizer {
                     this.right = !this.right;
                 }
                 console.log(data);
+                console.log(this.matrixJ, this.matrixI)
                 if (mode === 0) {
                     this.blocks[j].addDataByte(parseInt(data, 2));
                 } else {

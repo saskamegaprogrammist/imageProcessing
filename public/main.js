@@ -23,7 +23,7 @@ image.onload = () => {
     let mat = cv.imread(image);
     cv.cvtColor(mat, mat, cv.COLOR_RGBA2GRAY);
     cv.adaptiveThreshold(mat, mat, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 251, 0);
-    //cv.imshow('canvas', mat);
+    cv.imshow('canvas', mat);
     const qrCodeReader = new QRCodeReader();
     const result = qrCodeReader.read(mat);
     let finalMessage = "";
@@ -32,6 +32,6 @@ image.onload = () => {
         result.forEach((mess) => finalMessage = `${finalMessage} ${mess}`);
     }
     document.querySelector(".result-window").innerText = finalMessage;
-    //mat = qrCodeReader.getProcessedImage();
-    //cv.imshow('canvas', mat);
+    mat = qrCodeReader.getProcessedImage();
+    cv.imshow('canvas', mat);
 };

@@ -22,7 +22,7 @@ class BitsHolder {
 
     fill1AlignmentMarker() {
         const size = detectorProperties.statesSizeAlignment + 2;
-        const start = this.QRCodeProps.dimension-1 -detectorProperties.moduleSizeFinder-2;
+        const start = this.QRCodeProps.dimension-detectorProperties.moduleSizeFinder-2;
         for (let i = start; i < start + size; i++) {
             for (let j = start; j < start + size; j++) {
                 this.bitMatrix[i][j] = helperBit;

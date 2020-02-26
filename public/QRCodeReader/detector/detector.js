@@ -35,7 +35,10 @@ class QRDetector {
         this.imageCols = image.cols;
         this.imageRows = image.rows;
 
-        if (!this.searchForFinderPatterns()) return image;
+        if (!this.searchForFinderPatterns()) {
+            console.log("COULD NOT FIND FINDER PATTERNS");
+            return image;
+        }
 
         const centers = this.calculateDimension();
 
@@ -273,7 +276,7 @@ class QRDetector {
                 }
             }
         }
-        //console.log(this.moduleCenters);
+        console.log(this.moduleCenters);
         return (this.moduleCenters.length === 3);
     }
 
