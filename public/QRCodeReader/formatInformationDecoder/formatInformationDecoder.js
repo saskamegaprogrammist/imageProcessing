@@ -37,7 +37,7 @@ class FormatInformationDecoder {
     }
 
     correctErrors(maskedInfo) {
-        let errors = formatInformationConstants.errorNumber;
+        let errors = formatInformationConstants.maxErrors+1;
         let correctDataIndex;
         for (let i=0; i<32; i++) {
             let result = this.formatInformationStrings[i].findErrorNumbers(maskedInfo);
@@ -48,7 +48,7 @@ class FormatInformationDecoder {
                 }
             }
         }
-        if (errors !== formatInformationConstants.errorNumber) return correctDataIndex;
+        if (errors !== formatInformationConstants.maxErrors+1) return correctDataIndex;
         else return formatInformationConstants.errorNumber;
     }
 

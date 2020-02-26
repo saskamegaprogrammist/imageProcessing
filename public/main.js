@@ -27,9 +27,9 @@ image.onload = () => {
     const qrCodeReader = new QRCodeReader();
     const result = qrCodeReader.read(mat);
     let finalMessage = "";
-    if (result.includes(undefined)) finalMessage = "COULD NOT DECODE :(";
+    if (result === undefined || result.includes(undefined)) finalMessage = "COULD NOT DECODE :(";
     else {
-        result.forEach((mess) => finalMessage = `${finalMessage} ${mess}`);
+        result.forEach((mess) => finalMessage = `${finalMessage}${mess}`);
     }
     document.querySelector(".result-window").innerText = finalMessage;
     mat = qrCodeReader.getProcessedImage();

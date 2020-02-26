@@ -4,6 +4,11 @@ import {byteLength} from "../constants/constants";
 class BytesDecoder {
     bytesBlocks;
     message = [];
+    amountOfData = 0;
+    remainderBits = "";
+    continue = false;
+    currentStop = 0;
+    currentBlockMode;
 
     constructor(bytesBlocks) {
         this.bytesBlocks = bytesBlocks;
@@ -25,33 +30,39 @@ class BytesDecoder {
 
     decodeBlock(block) {
         const dataBytesInt = block.getDataBytes();
-        const firstByteInt = dataBytesInt[0];
-        const firstByteByte = this.addZeros(Number(firstByteInt).toString(2));
-        let current = firstByteByte.substring(0,  4);
-        console.log(current);
-        const blockMode = modes[current];
-        const blockCharCount = charCount[current];
-        let blockCharCountNumber = firstByteByte.substring(4, byteLength);
-        const secondByteInt = dataBytesInt[1];
-        const secondByteByte = this.addZeros(Number(secondByteInt).toString(2));
-        current = secondByteByte.substring(0, blockCharCount-4);
-        blockCharCountNumber += current;
-        const blockCharCountNumberInt =  parseInt(blockCharCountNumber, 2).toString();
-        const remainderBits = secondByteByte.substring(blockCharCount-4, byteLength);
-        console.log(blockMode);
+        if (this.amountOfData === 0) {
+            this.continue = false;
+            const firstByteInt = dataBytesInt[0];
+            const firstByteByte = this.addZeros(Number(firstByteInt).toString(2));
+            let current = firstByteByte.substring(0, 4);
+            console.log(current);
+            this.currentBlockMode = modes[current];
+            const blockCharCount = charCount[current];
+            let blockCharCountNumber = firstByteByte.substring(4, byteLength);
+            const secondByteInt = dataBytesInt[1];
+            const secondByteByte = this.addZeros(Number(secondByteInt).toString(2));
+            current = secondByteByte.substring(0, blockCharCount - 4);
+            blockCharCountNumber += current;
+            this.amountOfData = parseInt(blockCharCountNumber, 2).toString();
+            this.remainderBits = secondByteByte.substring(blockCharCount - 4, byteLength);
+            console.log(this.currentBlockMode);
+        } else {
+            this.continue = true;
+        }
 
-        switch (blockMode) {
+        switch (this.currentBlockMode) {
             case "NUM":
-                return this.decodeNumberBlock(blockCharCountNumberInt, remainderBits, dataBytesInt);
+                return this.decodeNumberBlock(dataBytesInt);
             case "ALPHANUM":
-                //return this.decodeAlphaNumberBlock(blockCharCountNumberInt, remainderBits, dataBytesInt);
+                //return this.decodeAlphaNumberBlock(blockCharCountN.umberInt, remainderBits, dataBytesInt);
             case "BYTE":
-                return this.decodeAsciiBlock(blockCharCountNumberInt, remainderBits, dataBytesInt);
+                return this.decodeAsciiBlock(dataBytesInt);
         }
     }
-    decodeNumberBlock(amountOfData, remainderBits, dataBytesInt) {
+    decodeNumberBlock(dataBytesInt) {
+        let length = dataBytesInt.length;
         let message = "";
-        let restBits = amountOfData%3;
+        let restBits = this.amountOfData%3;
         switch (restBits) {
             case 0:
                 break;
@@ -62,25 +73,31 @@ class BytesDecoder {
                 restBits = 7;
                 break;
         }
-        const normalBytes = Math.trunc(amountOfData/3);
-        let counter = 2;
-        for (let i=0; i<normalBytes; i++) {
+        const normalBytes = Math.trunc(this.amountOfData/3);
+        let counter;
+        if (this.continue) counter = 0;
+        else  counter = 2;
+        for (let i=this.currentStop; i<normalBytes; i++) {
             let currentByte = "";
             for (let j=0; j<10; ) {
-                currentByte += remainderBits;
-                j+=remainderBits.length;
+                currentByte += this.remainderBits;
+                j+=this.remainderBits.length;
                 if (j===10) break;
                 const newByteInt = dataBytesInt[counter];
                 counter++;
                 const newByteIntByte = this.addZeros(Number(newByteInt).toString(2));
                 if ((10-j) >= byteLength) {
-                    remainderBits = "";
+                    this.remainderBits = "";
                     currentByte += newByteIntByte;
                     j+=byteLength;
                 } else {
                     currentByte += newByteIntByte.substring(0, 10-j);
-                    remainderBits = newByteIntByte.substring(10-j, byteLength);
+                    this.remainderBits = newByteIntByte.substring(10-j, byteLength);
                     j=10;
+                }
+                if (counter >= length) {
+                    this.currentStop = i;
+                    return message;
                 }
 
             }
@@ -88,35 +105,44 @@ class BytesDecoder {
         }
         if (restBits !== 0) {
             let restByte = "";
-            if (remainderBits.length > restBits) {
-                restByte = remainderBits.substring(0, restByte);
+            if (this.remainderBits.length > restBits) {
+                restByte = this.remainderBits.substring(0, restByte);
+                this.remainderBits = this.remainderBits.substring(restByte, this.remainderBits.length);
             } else {
-                restByte = remainderBits;
+                restByte = this.remainderBits;
                 const newByteIntByte = this.addZeros(Number(dataBytesInt[counter]).toString(2));
-                restByte += newByteIntByte.substring(0, restBits - remainderBits.length);
+                restByte += newByteIntByte.substring(0, restBits - this.remainderBits.length);
             }
             message += parseInt(restByte, 2).toString();
         }
         return message;
     }
 
-    decodeAsciiBlock(amountOfData, remainderBits, dataBytesInt) {
+    decodeAsciiBlock(dataBytesInt) {
         let length = dataBytesInt.length;
         let message = "";
-        let counter = 2;
-        for (let i=0; i<amountOfData; i++) {
+        let counter;
+        if (this.continue) counter = 0;
+        else  counter = 2;
+        for (let i=this.currentStop; i<this.amountOfData; i++) {
             let currentByte = "";
-            currentByte += remainderBits;
+            currentByte += this.remainderBits;
             if (counter<length) {
                 const newByteInt = dataBytesInt[counter];
                 counter++;
                 const newByteIntByte = this.addZeros(Number(newByteInt).toString(2));
                 currentByte += newByteIntByte.substring(0, 4);
-                remainderBits = newByteIntByte.substring(4, byteLength);
+                this.remainderBits = newByteIntByte.substring(4, byteLength);
+                const symbol = parseInt(currentByte, 2);
+                console.log(symbol);
+                console.log(String.fromCharCode(symbol));
+                message += String.fromCharCode(symbol);
+            } else {
+                this.currentStop = i;
+                return message;
             }
-            const symbol = parseInt(currentByte, 2);
-            message += String.fromCharCode(symbol);
         }
+        this.amountOfData = 0;
         return message;
 
     }
