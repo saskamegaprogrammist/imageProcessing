@@ -111,9 +111,6 @@ class BitsExtractor {
     }
 
     readRemainedBottomBits() {
-        if (this.currentY % this.QRCodeProps.averagePixelSize !== 0) {
-            this.currentY++; //we want our pixel to be lower
-        }
         const startX = this.currentX;
         for (let i = this.QRCodeProps.dimension - detectorProperties.moduleSizeFinder  ; i < this.QRCodeProps.dimension ; i++) { //going from to left right
             for (let j = this.QRCodeProps.dimension - detectorProperties.moduleSizeFinder ; j >= detectorProperties.moduleSizeFinder + 1; j--) {

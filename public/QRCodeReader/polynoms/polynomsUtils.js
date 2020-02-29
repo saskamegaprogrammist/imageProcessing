@@ -105,6 +105,7 @@ class PolynomsUtils {
                 if (i>0) {
                     mainCoefficents.push(polynom1.getCoefficentByDegree(i - 1));
                     divisionCoefficents.push(0);
+                    divisionDegCounter--;
                     i--;
                 } else {
                     break;

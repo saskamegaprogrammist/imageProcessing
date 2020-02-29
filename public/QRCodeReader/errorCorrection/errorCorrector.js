@@ -164,7 +164,7 @@ class ErrorCorrector {
         const bytesLength = this.bytes.length;
         for (let i=0; i<errorPositions.length; i++) {
             const power = this.galousField.getPowerByVal(errorPositions[i]);
-            //console.log(power);
+            // console.log(power);
             this.bytes[bytesLength -1 - power] = this.galousField.add(this.bytes[bytesLength -1 - power], errorValues[i]);
         }
     }
