@@ -9,8 +9,8 @@ var root = path.resolve(__dirname, '..', 'packedDir');
 var rootImg = path.resolve(__dirname, '..', 'public');
 app.use(express.static(root));
 app.use(express.static(rootImg));
-app.use(fallback('start.html', { root: root }));
-app.use(fallback('start.html', { root: rootImg }));
+app.use(fallback('index.html', { root: root }));
+app.use(fallback('index.html', { root: rootImg }));
 
 
 const port = process.env.PORT || 3001;
