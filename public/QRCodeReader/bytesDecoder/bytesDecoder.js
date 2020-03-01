@@ -35,7 +35,7 @@ class BytesDecoder {
             const firstByteInt = dataBytesInt[0];
             const firstByteByte = this.addZeros(Number(firstByteInt).toString(2));
             let current = firstByteByte.substring(0, 4);
-            console.log(current);
+            //console.log(current);
             this.currentBlockMode = modes[current];
             const blockCharCount = charCount[current];
             let blockCharCountNumber = firstByteByte.substring(4, byteLength);
@@ -45,7 +45,7 @@ class BytesDecoder {
             blockCharCountNumber += current;
             this.amountOfData = parseInt(blockCharCountNumber, 2).toString();
             this.remainderBits = secondByteByte.substring(blockCharCount - 4, byteLength);
-            console.log(this.currentBlockMode);
+            //console.log(this.currentBlockMode);
         } else {
             this.continue = true;
         }
@@ -134,8 +134,8 @@ class BytesDecoder {
                 currentByte += newByteIntByte.substring(0, 4);
                 this.remainderBits = newByteIntByte.substring(4, byteLength);
                 const symbol = parseInt(currentByte, 2);
-                console.log(symbol);
-                console.log(String.fromCharCode(symbol));
+                //console.log(symbol);
+                //console.log(String.fromCharCode(symbol));
                 message += String.fromCharCode(symbol);
             } else {
                 this.currentStop = i;

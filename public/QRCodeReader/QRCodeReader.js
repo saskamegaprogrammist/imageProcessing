@@ -25,18 +25,22 @@ class QRCodeReader {
     read(image) {
         this.originalImage = image;
         this.detect();
+        if (this.processedImage === undefined) {
+            console.log("ERROR FINDING CODE");
+            return undefined;
+        }
         this.extract();
-        console.log(this.bitsHolder.getFormatInformationBits1());
-        console.log(this.bitsHolder.getFormatInformationBits2());
+        //console.log(this.bitsHolder.getFormatInformationBits1());
+        //console.log(this.bitsHolder.getFormatInformationBits2());
         this.readFormatInformation();
         if (this.formatInfo === formatInformationConstants.errorNumber) {
             console.log("FORMAT DATA CAN'T BE READ");
-            return;
+            return undefined;
         }
-        console.log(this.formatInfo);
+        //console.log(this.formatInfo);
         this.bitsHolder.unmaskData(this.formatInfo.getMaskingFunction());
         this.result = this.readDataBlocks();
-        console.log(this.result);
+        //console.log(this.result);
         return this.result;
         // const polynomeUtils = new PolynomsUtils();
         // polynomeUtils.dividePolynoms(new Polynom([4, 2, 1, 0, 0]), new Polynom( [1, 2, 2]));

@@ -276,7 +276,7 @@ class QRDetector {
                 }
             }
         }
-        console.log(this.moduleCenters);
+        //console.log(this.moduleCenters);
         return (this.moduleCenters.length === 3);
     }
 

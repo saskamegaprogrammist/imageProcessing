@@ -21,7 +21,7 @@ class ErrorCorrector {
          let dataBytes = this.bytesBlock.getDataBytes();
          let ecBytes = this.bytesBlock.getECBytes();
          this.bytes = dataBytes.concat(ecBytes);
-         console.log(this.bytes);
+         //console.log(this.bytes);
     }
 
     calculateSyndromes() {
@@ -49,7 +49,7 @@ class ErrorCorrector {
         for (let i=0; i<this.syndromes.length; i++) {
             sum += this.syndromes[i];
         }
-        console.log(this.syndromes, sum);
+        //console.log(this.syndromes, sum);
         return (sum === 0);
     }
 
@@ -67,12 +67,12 @@ class ErrorCorrector {
         } else {
             console.log("NEEDS CORRECTION");
             this.euclidianAlgorithm();
-            console.log(this.errorsPolynom, this.remainderPolynom);
+            //console.log(this.errorsPolynom, this.remainderPolynom);
             const errorPositions = this.chensSearch();
             const errorValues = this.errorValuesSearch(errorPositions);
-            console.log(errorValues, errorPositions);
+            //console.log(errorValues, errorPositions);
             this.errorsAdding(errorPositions, errorValues);
-            console.log(this.bytes);
+            //console.log(this.bytes);
             this.setCorrectedData();
             return this.bytesBlock;
         }
@@ -91,7 +91,7 @@ class ErrorCorrector {
         let polynom2 = new Polynom(this.syndromes.reverse());
         let b1 = polynomUtils.createZero();
         let b2 = new polynomUtils.createPlainPolynomByDegree(0);
-        console.log(polynom1, polynom2);
+        //console.log(polynom1, polynom2);
         for (;;) {
             let {divisionResult, remainder} = polynomUtils.dividePolynoms(polynom1, polynom2);
             //console.log(remainder, divisionResult);
@@ -126,7 +126,7 @@ class ErrorCorrector {
             }
             if (answer===0) roots.push(x);
         }
-        console.log(roots);
+        //console.log(roots);
         const degrees = [];
         for (let i=0; i<degree; i++) {
             degrees.push(this.galousField.getInverse(roots[i]));

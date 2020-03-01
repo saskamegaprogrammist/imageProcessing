@@ -16,9 +16,9 @@ class BytesBlockReorganizer {
     constructor(version, errorCorrectionLevel, matrix) {
         this.bitMatrix = matrix;
         this.findBytesBlockData(version, errorCorrectionLevel);
-        console.log(this.bytesBlockData);
+        //console.log(this.bytesBlockData);
         this.extractData();
-        console.log(this.blocks);
+        //console.log(this.blocks);
         this.correctBytes();
     }
 
@@ -127,8 +127,8 @@ class BytesBlockReorganizer {
                     }
                     this.right = !this.right;
                 }
-                console.log(data);
-                console.log(this.matrixJ, this.matrixI)
+                //console.log(data);
+                //console.log(this.matrixJ, this.matrixI)
                 if (mode === 0) {
                     this.blocks[j].addDataByte(parseInt(data, 2));
                 } else {

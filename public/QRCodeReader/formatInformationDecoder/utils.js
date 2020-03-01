@@ -35,7 +35,7 @@ function xor(number1, number2) {
         smallerNumber = Math.trunc(smallerNumber/10);
         if (smallerNumber === 0) break;
     }
-    //console.log(biggerNumber, result);
+    ////console.log(biggerNumber, result);
     for(;;) {
         //console.log(biggerNumber%10, Math.trunc(biggerNumber/10), result);
         result += Math.pow(10, counter)*(biggerNumber%10);

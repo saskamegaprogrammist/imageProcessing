@@ -13,7 +13,7 @@ class FormatInformationDecoder {
 
     setFormatInformation1(formatInformation1) {
         this.formatInformation1 = Number(formatInformation1.join(''));
-        console.log(this.formatInformation1);
+        //console.log(this.formatInformation1);
     }
     setFormatInformation2(formatInformation2) {
         this.formatInformation2 = Number(formatInformation2.join(''));

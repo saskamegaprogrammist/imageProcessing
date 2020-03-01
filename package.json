@@ -21,6 +21,7 @@
     "mathjs": "^6.6.0",
     "morgan": "^1.9.0",
     "pug": "^2.0.4",
+    "qr-scanner": "^1.1.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

@@ -58,7 +58,7 @@ class BitsExtractor {
                     this.matrix[i][j] = 0;
                 }
                 //console.log(this.currentY, this.currentX);
-                this.setPixel(this.currentY, this.currentX, 126);
+                this.setPixel(this.currentY, this.currentX, 94);
                 this.currentX -= this.QRCodeProps.averagePixelSize;
             }
             this.currentX = startX;
@@ -81,7 +81,7 @@ class BitsExtractor {
                     }
                 }
                 //console.log(this.currentY, this.currentX);
-                this.setPixel(this.currentY, this.currentX, 126);
+                this.setPixel(this.currentY, this.currentX, 83);
                 this.currentX += this.QRCodeProps.averagePixelSize;
             }
             this.currentX = startX;
@@ -122,7 +122,7 @@ class BitsExtractor {
                     }
                 }
                 //console.log(this.currentY, this.currentX);
-                this.setPixel(this.currentY, this.currentX, 126);
+                this.setPixel(this.currentY, this.currentX, 200);
                 this.currentX -= this.QRCodeProps.averagePixelSize;
             }
             this.currentX = startX;
@@ -147,7 +147,7 @@ class BitsExtractor {
                     }
                 }
                 //console.log(this.currentY, this.currentX);
-                this.setPixel(this.currentY, this.currentX, 126);
+                this.setPixel(this.currentY, this.currentX, 168);
                 this.currentY -= this.QRCodeProps.averagePixelSize;
             }
             this.currentY = startY;
@@ -191,7 +191,7 @@ class BitsExtractor {
             }
             this.currentX += this.QRCodeProps.averagePixelSize;
         }
-        console.log('true');
+        //console.log('true');
         return true;
     }
 
@@ -359,7 +359,7 @@ class BitsExtractor {
                 }
             }
         }
-        console.log(this.matrix);
+        //console.log(this.matrix);
         return this.matrix;
     }
 
